@@ -15,6 +15,13 @@ services:
     restart: unless-stopped
 
   artex:
+    # No public image for this checkout — build it locally.
+    # Prereq: dist/arm64/artex (or dist/amd64/artex on x86) built by ./build.sh.
+    build:
+      context: .
+      args:
+        # The classic (non-BuildKit) builder does not supply TARGETARCH.
+        TARGETARCH: ${TARGETARCH:-arm64}
     image: autumn27/artex:${ARTEX_TAG:-latest}
     depends_on:
       postgres:
